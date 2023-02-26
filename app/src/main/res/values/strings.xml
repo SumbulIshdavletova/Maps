@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Maps</string>
+    <string name="cluster_tap_message">Tapped cluster with %d items</string>
+    <string name="description_post_menu">Location menu</string>
+    <string name="menu_edit">Edit</string>
+    <string name="menu_remove">Remove</string>
+    <string name="empty_posts">There are no place marks.\nIf you create a new one, it will appear here</string>
+    <string name="place_mark_title">Place mark title</string>
+    <string name="save">SAVE</string>
+
+</resources>
