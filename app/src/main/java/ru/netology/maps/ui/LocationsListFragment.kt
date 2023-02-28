@@ -1,7 +1,6 @@
 package ru.netology.maps.ui
 
 import android.app.Dialog
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -12,7 +11,6 @@ import android.widget.EditText
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
-import com.yandex.mapkit.MapKitFactory
 import ru.netology.maps.R
 import ru.netology.maps.adapter.LocationAdapter
 import ru.netology.maps.adapter.OnInteractionListener
@@ -27,6 +25,7 @@ class LocationsListFragment : Fragment(R.layout.fragment_location_list) {
 
     companion object {
         var Bundle.textArg: String? by StringArg
+        var Bundle.textArg2: String? by StringArg
     }
 
     private val viewModel: LocationViewModel by viewModels()
@@ -48,16 +47,7 @@ class LocationsListFragment : Fragment(R.layout.fragment_location_list) {
             override fun onEdit(location: Location) {
                 viewModel.edit(location)
                 showCustomDialog()
-                //         binding.titleAndSave.visibility = View.VISIBLE
-//                val text = binding.title.text.toString()
-//                val save = binding.save
-//
-//                save.setOnClickListener {
-//                    viewModel.changeTitle(
-//                        text
-//                    )
-//                    binding.titleAndSave.visibility = View.GONE
-//                }
+
             }
 
             override fun onRemove(location: Location) {
@@ -67,7 +57,9 @@ class LocationsListFragment : Fragment(R.layout.fragment_location_list) {
             override fun onClick(location: Location) {
                 findNavController().navigate(R.id.action_locationsListFragment_to_mapsFragment,
                     Bundle().apply {
-                        textArg = location.id.toString()
+                        textArg = location.latitude.toString()
+                        textArg2 = location.longitude.toString()
+
                     })
             }
         })
@@ -77,9 +69,6 @@ class LocationsListFragment : Fragment(R.layout.fragment_location_list) {
         viewModel.data.observe(viewLifecycleOwner) { location ->
             adapter.submitList(location)
         }
-
-
-
 
         return binding.root
     }
@@ -91,7 +80,6 @@ class LocationsListFragment : Fragment(R.layout.fragment_location_list) {
         dialog?.setContentView(R.layout.title_dialog)
         val save = dialog?.findViewById<Button>(R.id.save)
         val text = dialog?.findViewById<EditText>(R.id.title)
-        //   text?.text.toString()
 
         save?.setOnClickListener {
             viewModel.changeTitle(text?.text.toString())

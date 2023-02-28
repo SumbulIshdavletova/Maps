@@ -8,18 +8,13 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import androidx.constraintlayout.widget.Group
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.ViewModel
-import androidx.navigation.fragment.FragmentNavigator
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.textfield.TextInputEditText
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKit
 import com.yandex.mapkit.MapKitFactory
@@ -33,6 +28,7 @@ import com.yandex.runtime.ui_view.ViewProvider
 import ru.netology.maps.R
 import ru.netology.maps.dto.Location
 import ru.netology.maps.ui.LocationsListFragment.Companion.textArg
+import ru.netology.maps.ui.LocationsListFragment.Companion.textArg2
 import ru.netology.maps.viewModel.LocationViewModel
 
 
@@ -98,38 +94,18 @@ class MapsFragment : Fragment(R.layout.fragment_maps), GeoObjectTapListener, Inp
         super.onCreate(savedInstanceState)
         mapView = view.findViewById(R.id.mapview) as MapView
 
-
-//        mapView.map?.move(
-//            CameraPosition(Point(55.751574, 37.573856), 11.0f, 0.0f, 0.0f),
-//            Animation(Animation.Type.SMOOTH, 0F),
-//            null
-//        )
-
         var mapkit: MapKit = MapKitFactory.getInstance()
 
         mapView.map?.addTapListener(this)
         mapView.map?.addInputListener(this)
 
-        drawMyLocationMark(54.695544, 55.994435)
-
-
         val addLocation = view.findViewById(R.id.add_location) as FloatingActionButton
-        val title = view.findViewById(R.id.title_and_save) as Group
 
         addLocation.setOnClickListener {
-            //   title.visibility = View.VISIBLE
             showCustomDialog()
             drawMyLocationMark(point.latitude, point.longitude)
+
         }
-
-
-//        val save = view.findViewById<Button>(R.id.save)
-//        val text = view.findViewById<EditText>(R.id.title)
-//        text.text.toString()
-//        save.setOnClickListener {
-//            viewModel.changeLocationAndSave(point.latitude, point.longitude, text.text.toString())
-//            title.visibility = View.GONE
-//        }
 
 
         val allList = view.findViewById(R.id.all_locations) as FloatingActionButton
@@ -137,17 +113,19 @@ class MapsFragment : Fragment(R.layout.fragment_maps), GeoObjectTapListener, Inp
             findNavController().navigate(R.id.action_mapsFragment_to_locationsListFragment)
         }
 
-        val id = arguments?.textArg?.toLong()
 
 
         viewModel.data.observe(viewLifecycleOwner) { locations ->
-            val location = locations.find { it.id == arguments?.textArg?.toLong() } ?: run {
-                findNavController().navigateUp()
-                return@observe
-            }
-            drawMyLocationMark(location.latitude, location.longitude)
+            drawMyLocationMarks(locations)
+
+        }
+
+        val longitudeBundle = arguments?.textArg2?.toDouble()
+        val latitudeBundle = arguments?.textArg?.toDouble()
+
+        if (longitudeBundle != null && latitudeBundle != null) {
             mapView.map?.move(
-                CameraPosition(Point(location.latitude, location.longitude), 17.0f, 0.0f, 0.0f),
+                CameraPosition(Point(latitudeBundle, longitudeBundle), 17.0f, 0.0f, 0.0f),
                 Animation(Animation.Type.SMOOTH, 8F),
                 null
             )
@@ -182,7 +160,7 @@ class MapsFragment : Fragment(R.layout.fragment_maps), GeoObjectTapListener, Inp
     }
 
     override fun onMapTap(p0: com.yandex.mapkit.map.Map, p1: Point) {
-        point = Point(p1.latitude, p1.longitude)
+        //     point = Point(p1.latitude, p1.longitude)
         mapView.map?.deselectGeoObject()
     }
 
@@ -205,7 +183,19 @@ class MapsFragment : Fragment(R.layout.fragment_maps), GeoObjectTapListener, Inp
         )
     }
 
-    fun showCustomDialog() {
+    private fun drawMyLocationMarks(locations: List<Location>) {
+        val view = View(requireContext()).apply {
+            background = requireContext().getDrawable(R.drawable.ic_baseline_adjust_24)
+        }
+        for (location in locations) {
+            mapView.map?.mapObjects?.addPlacemark(
+                Point(location.latitude, location.longitude),
+                ViewProvider(view)
+            )
+        }
+    }
+
+    private fun showCustomDialog() {
         val dialog = context?.let { Dialog(it) }
         dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog?.setCancelable(true)
@@ -214,7 +204,7 @@ class MapsFragment : Fragment(R.layout.fragment_maps), GeoObjectTapListener, Inp
         val text = dialog?.findViewById<EditText>(R.id.title)
         text?.text.toString()
         save?.setOnClickListener {
-            viewModel.changeLocationAndSave(point.latitude, point.longitude, text?.text.toString())
+            viewModel.saveLocation(point.latitude, point.longitude, text?.text.toString())
             dialog.dismiss()
         }
 

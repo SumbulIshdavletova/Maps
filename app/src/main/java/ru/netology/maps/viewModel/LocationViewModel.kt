@@ -24,7 +24,7 @@ class LocationViewModel(application: Application) : AndroidViewModel(application
     val data = repository.getAll()
     private val edited = MutableLiveData(empty)
 
-    fun changeLocationAndSave(latitude: Double, longitude: Double, title: String) {
+    fun saveLocation(latitude: Double, longitude: Double, title: String) {
         val l = latitude
         val l2 = longitude
         if (edited.value?.latitude == l && edited.value?.longitude == l2) {
