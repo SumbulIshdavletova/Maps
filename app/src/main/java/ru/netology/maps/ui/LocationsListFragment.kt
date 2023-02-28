@@ -9,8 +9,10 @@ import android.view.Window
 import android.widget.Button
 import android.widget.EditText
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.maps.R
 import ru.netology.maps.adapter.LocationAdapter
 import ru.netology.maps.adapter.OnInteractionListener
@@ -20,6 +22,7 @@ import ru.netology.maps.util.StringArg
 
 import ru.netology.maps.viewModel.LocationViewModel
 
+@AndroidEntryPoint
 class LocationsListFragment : Fragment(R.layout.fragment_location_list) {
 
 
@@ -28,7 +31,7 @@ class LocationsListFragment : Fragment(R.layout.fragment_location_list) {
         var Bundle.textArg2: String? by StringArg
     }
 
-    private val viewModel: LocationViewModel by viewModels()
+    private val viewModel: LocationViewModel by activityViewModels()
 
 
     override fun onCreateView(

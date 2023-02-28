@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
 
     <application
+        android:name=".application.App"
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"
         android:fullBackupContent="@xml/backup_rules"
@@ -19,6 +20,8 @@
         <activity
             android:name=".ui.MainActivity"
             android:exported="true">
+            <nav-graph android:value="@navigation/nav_main" />
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

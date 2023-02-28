@@ -1,12 +1,14 @@
 package ru.netology.maps.repository
 
-import androidx.lifecycle.LiveData
+
+import kotlinx.coroutines.flow.Flow
 import ru.netology.maps.dto.Location
 
 interface LocationRepository {
 
-    fun getAll(): LiveData<List<Location>>
-    fun save(location: Location)
-    fun removeById(id: Long)
+    val data: Flow<List<Location>>
+    suspend fun getAll(): Flow<List<Location>>
+    suspend fun save(location: Location)
+    suspend fun removeById(id: Long)
 
 }

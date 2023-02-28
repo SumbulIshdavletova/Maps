@@ -12,6 +12,7 @@ abstract class AppDb : RoomDatabase() {
 
     abstract fun locationDao(): MapDao
 
+
     companion object {
         @Volatile
         private var instance: AppDb? = null

@@ -1,12 +1,12 @@
 package ru.netology.maps.viewModel
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
-import androidx.lifecycle.MutableLiveData
-import ru.netology.maps.db.AppDb
+import androidx.lifecycle.*
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import ru.netology.maps.dto.Location
 import ru.netology.maps.repository.LocationRepository
-import ru.netology.maps.repository.LocationRepositoryImpl
+import javax.inject.Inject
 
 
 private val empty = Location(
@@ -16,45 +16,55 @@ private val empty = Location(
     title = "",
 )
 
-class LocationViewModel(application: Application) : AndroidViewModel(application) {
-    // упрощённый вариант
-    private val repository: LocationRepository = LocationRepositoryImpl(
-        AppDb.getInstance(context = application).locationDao()
-    )
-    val data = repository.getAll()
+@HiltViewModel
+class LocationViewModel @Inject constructor(
+    private val repository: LocationRepository
+) : ViewModel() {
+
+
+    //    private val repository: LocationRepository = LocationRepositoryImpl(
+//        AppDb.getInstance(context = application).locationDao()
+//    )
+    val data = repository.data.asLiveData(Dispatchers.Default)
     private val edited = MutableLiveData(empty)
+
+    init {
+        loadPlacemarks()
+    }
+    fun loadPlacemarks() = viewModelScope.launch { repository.getAll() }
 
     fun saveLocation(latitude: Double, longitude: Double, title: String) {
         val l = latitude
         val l2 = longitude
         if (edited.value?.latitude == l && edited.value?.longitude == l2) {
             return
-        } else {
+        }
+        viewModelScope.launch {
             edited.value?.let {
                 repository.save(it.copy(latitude = l, longitude = l2, title = title))
             }
         }
         edited.value = empty
-
     }
 
     fun changeTitle(title: String) {
         if (edited.value?.title == title) {
             return
         }
-        edited.value?.let {
-            repository.save(it.copy(title = title))
+        viewModelScope.launch {
+            edited.value?.let {
+                repository.save(it.copy(title = title))
+            }
+
+            edited.value = empty
         }
-
-        edited.value = empty
-
     }
 
     fun edit(location: Location) {
         edited.value = location
     }
 
-    fun removeById(id: Long) = repository.removeById(id)
+    fun removeById(id: Long) = viewModelScope.launch { repository.removeById(id) }
 
 
 }

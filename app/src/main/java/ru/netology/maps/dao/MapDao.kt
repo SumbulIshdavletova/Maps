@@ -1,24 +1,24 @@
 package ru.netology.maps.dao
 
-import androidx.lifecycle.LiveData
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
+import kotlinx.coroutines.flow.Flow
 import ru.netology.maps.entity.LocationEntity
 
 @Dao
 interface MapDao {
 
     @Query("SELECT * FROM LocationEntity ORDER BY id DESC")
-    fun getAll(): LiveData<List<LocationEntity>>
+    fun getAll(): Flow<List<LocationEntity>>
 
     @Insert
-    fun insert(location: LocationEntity)
+    suspend fun insert(location: LocationEntity)
 
     @Query("UPDATE LocationEntity SET latitude = :latitude, longitude = :longitude, title = :title WHERE id = :id")
-    fun updateContentById(id: Long, latitude: Double, longitude: Double, title: String)
+    suspend fun updateContentById(id: Long, latitude: Double, longitude: Double, title: String)
 
-    fun save(location: LocationEntity) =
+    suspend fun save(location: LocationEntity) =
         if (location.id == 0L) insert(location) else updateContentById(
             location.id,
             location.latitude,
@@ -27,5 +27,5 @@ interface MapDao {
         )
 
     @Query("DELETE FROM LocationEntity WHERE id = :id")
-    fun removeById(id: Long)
+    suspend fun removeById(id: Long)
 }

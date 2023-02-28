@@ -8,11 +8,10 @@ import android.os.Bundle
 import android.view.*
 import android.widget.Button
 import android.widget.EditText
-import androidx.constraintlayout.widget.Group
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yandex.mapkit.Animation
@@ -25,21 +24,19 @@ import com.yandex.mapkit.map.*
 import com.yandex.mapkit.mapview.MapView
 import com.yandex.mapkit.user_location.UserLocationLayer
 import com.yandex.runtime.ui_view.ViewProvider
+import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.maps.R
 import ru.netology.maps.dto.Location
 import ru.netology.maps.ui.LocationsListFragment.Companion.textArg
 import ru.netology.maps.ui.LocationsListFragment.Companion.textArg2
 import ru.netology.maps.viewModel.LocationViewModel
 
-
+@AndroidEntryPoint
 class MapsFragment : Fragment(R.layout.fragment_maps), GeoObjectTapListener, InputListener {
 
     private lateinit var mapView: MapView
-    private val viewModel: LocationViewModel by viewModels()
+    private val viewModel: LocationViewModel by activityViewModels()
 
-    private val PERMISSIONS_REQUEST_FINE_LOCATION = 1
-
-    private val userLocationLayer: UserLocationLayer? = null
 
     private val MAPKIT_API_KEY = "8174a68d-2910-48fc-b27a-abea5746916b"
 
@@ -61,23 +58,6 @@ class MapsFragment : Fragment(R.layout.fragment_maps), GeoObjectTapListener, Inp
             initialized = true
         }
 
-    }
-
-    private fun requestLocationPermission() {
-        if (ContextCompat.checkSelfPermission(
-                requireContext(),
-                "android.permission.ACCESS_FINE_LOCATION"
-            )
-            != PackageManager.PERMISSION_GRANTED
-
-        ) {
-            activity?.let {
-                ActivityCompat.requestPermissions(
-                    it.parent, arrayOf("android.permission.ACCESS_FINE_LOCATION"),
-                    PERMISSIONS_REQUEST_FINE_LOCATION
-                )
-            }
-        }
     }
 
 
