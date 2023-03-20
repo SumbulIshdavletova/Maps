@@ -27,8 +27,8 @@ import com.yandex.runtime.ui_view.ViewProvider
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.maps.R
 import ru.netology.maps.dto.Location
-import ru.netology.maps.ui.LocationsListFragment.Companion.textArg
-import ru.netology.maps.ui.LocationsListFragment.Companion.textArg2
+import ru.netology.maps.ui.LocationsListFragment.Companion.textArgLatitude
+import ru.netology.maps.ui.LocationsListFragment.Companion.textArgLongitude
 import ru.netology.maps.viewModel.LocationViewModel
 
 @AndroidEntryPoint
@@ -68,31 +68,29 @@ class MapsFragment : Fragment(R.layout.fragment_maps), GeoObjectTapListener, Inp
     ): View {
 
         MapKitInitializer.initialize(MAPKIT_API_KEY, requireContext())
+        val binding = ru.netology.maps.databinding.FragmentMapsBinding.inflate(
+            inflater, container, false
+        )
 
-        val view = inflater.inflate(R.layout.fragment_maps, container, false)
+        mapView = binding.mapview
 
-        super.onCreate(savedInstanceState)
-        mapView = view.findViewById(R.id.mapview) as MapView
 
         var mapkit: MapKit = MapKitFactory.getInstance()
 
         mapView.map?.addTapListener(this)
         mapView.map?.addInputListener(this)
 
-        val addLocation = view.findViewById(R.id.add_location) as FloatingActionButton
-
+        val addLocation = binding.addLocation
         addLocation.setOnClickListener {
             showCustomDialog()
             drawMyLocationMark(point.latitude, point.longitude)
 
         }
 
-
-        val allList = view.findViewById(R.id.all_locations) as FloatingActionButton
+        val allList = binding.allLocations
         allList.setOnClickListener {
             findNavController().navigate(R.id.action_mapsFragment_to_locationsListFragment)
         }
-
 
 
         viewModel.data.observe(viewLifecycleOwner) { locations ->
@@ -100,8 +98,8 @@ class MapsFragment : Fragment(R.layout.fragment_maps), GeoObjectTapListener, Inp
 
         }
 
-        val longitudeBundle = arguments?.textArg2?.toDouble()
-        val latitudeBundle = arguments?.textArg?.toDouble()
+        val longitudeBundle = arguments?.textArgLongitude?.toDouble()
+        val latitudeBundle = arguments?.textArgLatitude?.toDouble()
 
         if (longitudeBundle != null && latitudeBundle != null) {
             mapView.map?.move(
@@ -111,8 +109,7 @@ class MapsFragment : Fragment(R.layout.fragment_maps), GeoObjectTapListener, Inp
             )
         }
 
-
-        return view
+        return binding.root
     }
 
 
@@ -139,16 +136,15 @@ class MapsFragment : Fragment(R.layout.fragment_maps), GeoObjectTapListener, Inp
         return selectionMetadata != null
     }
 
-    override fun onMapTap(p0: com.yandex.mapkit.map.Map, p1: Point) {
-        //     point = Point(p1.latitude, p1.longitude)
+    override fun onMapTap(maps: com.yandex.mapkit.map.Map, point: Point) {
         mapView.map?.deselectGeoObject()
     }
 
-    override fun onMapLongTap(p0: com.yandex.mapkit.map.Map, p1: Point) {
+    override fun onMapLongTap(maps: com.yandex.mapkit.map.Map, longTapPoint: Point) {
         val text = mapView.map?.deselectGeoObject()
-        drawMyLocationMark(p1.latitude, p1.longitude)
+        drawMyLocationMark(longTapPoint.latitude, longTapPoint.longitude)
 
-        point = Point(p1.latitude, p1.longitude)
+        point = Point(longTapPoint.latitude, longTapPoint.longitude)
 
     }
 
@@ -175,22 +171,11 @@ class MapsFragment : Fragment(R.layout.fragment_maps), GeoObjectTapListener, Inp
         }
     }
 
-    private fun showCustomDialog() {
-        val dialog = context?.let { Dialog(it) }
-        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog?.setCancelable(true)
-        dialog?.setContentView(R.layout.title_dialog)
-        val save = dialog?.findViewById<Button>(R.id.save)
-        val text = dialog?.findViewById<EditText>(R.id.title)
-        text?.text.toString()
-        save?.setOnClickListener {
-            viewModel.saveLocation(point.latitude, point.longitude, text?.text.toString())
-            dialog.dismiss()
-        }
-
-        dialog?.show()
+    fun showCustomDialog() {
+        val dialog = TitleDialog(latitude = point.latitude, longitude = point.longitude)
+        dialog.show(childFragmentManager, "dialog")
 
     }
 
-
 }
+

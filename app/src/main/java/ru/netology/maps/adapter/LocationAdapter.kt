@@ -82,5 +82,4 @@ class LocationDiffCallback : DiffUtil.ItemCallback<Location>() {
         return oldItem == newItem
     }
 
-
 }

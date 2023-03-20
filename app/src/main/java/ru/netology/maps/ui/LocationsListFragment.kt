@@ -8,9 +8,9 @@ import android.view.ViewGroup
 import android.view.Window
 import android.widget.Button
 import android.widget.EditText
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
-import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.maps.R
@@ -27,8 +27,8 @@ class LocationsListFragment : Fragment(R.layout.fragment_location_list) {
 
 
     companion object {
-        var Bundle.textArg: String? by StringArg
-        var Bundle.textArg2: String? by StringArg
+        var Bundle.textArgLatitude: String? by StringArg
+        var Bundle.textArgLongitude: String? by StringArg
     }
 
     private val viewModel: LocationViewModel by activityViewModels()
@@ -50,7 +50,6 @@ class LocationsListFragment : Fragment(R.layout.fragment_location_list) {
             override fun onEdit(location: Location) {
                 viewModel.edit(location)
                 showCustomDialog()
-
             }
 
             override fun onRemove(location: Location) {
@@ -60,8 +59,8 @@ class LocationsListFragment : Fragment(R.layout.fragment_location_list) {
             override fun onClick(location: Location) {
                 findNavController().navigate(R.id.action_locationsListFragment_to_mapsFragment,
                     Bundle().apply {
-                        textArg = location.latitude.toString()
-                        textArg2 = location.longitude.toString()
+                        textArgLatitude = location.latitude.toString()
+                        textArgLongitude = location.longitude.toString()
 
                     })
             }
@@ -73,21 +72,15 @@ class LocationsListFragment : Fragment(R.layout.fragment_location_list) {
             adapter.submitList(location)
         }
 
+
         return binding.root
     }
 
     fun showCustomDialog() {
-        val dialog = context?.let { Dialog(it) }
-        dialog?.requestWindowFeature(Window.FEATURE_NO_TITLE)
-        dialog?.setCancelable(true)
-        dialog?.setContentView(R.layout.title_dialog)
-        val save = dialog?.findViewById<Button>(R.id.save)
-        val text = dialog?.findViewById<EditText>(R.id.title)
+        val dialog = TitleDialog(latitude = 0.0, longitude = 0.0)
+        dialog.show(childFragmentManager, "dialog")
 
-        save?.setOnClickListener {
-            viewModel.changeTitle(text?.text.toString())
-            dialog.dismiss()
-        }
-        dialog?.show()
     }
+
+
 }

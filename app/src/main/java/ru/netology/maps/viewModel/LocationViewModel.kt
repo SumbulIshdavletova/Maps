@@ -33,15 +33,18 @@ class LocationViewModel @Inject constructor(
     }
     fun loadPlacemarks() = viewModelScope.launch { repository.getAll() }
 
-    fun saveLocation(latitude: Double, longitude: Double, title: String) {
-        val l = latitude
-        val l2 = longitude
-        if (edited.value?.latitude == l && edited.value?.longitude == l2) {
+    fun saveLocation(latitude: Double, longitude: Double,
+                title: String
+    ) {
+        val saveLatitude = latitude
+        val saveLongitude = longitude
+        if (edited.value?.latitude == saveLatitude && edited.value?.longitude == saveLongitude) {
             return
         }
         viewModelScope.launch {
             edited.value?.let {
-                repository.save(it.copy(latitude = l, longitude = l2, title = title))
+                repository.save(it.copy(latitude = saveLatitude, longitude = saveLongitude,title = title
+                ))
             }
         }
         edited.value = empty
@@ -65,6 +68,7 @@ class LocationViewModel @Inject constructor(
     }
 
     fun removeById(id: Long) = viewModelScope.launch { repository.removeById(id) }
+
 
 
 }

@@ -20,8 +20,7 @@
         android:layout_height="wrap_content"
         android:background="@color/cardview_light_background"
         android:hint="@string/place_mark_title"
-        android:inputType="text"
-        />
+        android:inputType="text" />
 
     <Button
         android:id="@+id/save"
@@ -30,5 +29,6 @@
         android:layout_gravity="end"
         android:layout_marginTop="@dimen/common_spacing"
         android:text="@string/save" />
+
 
 </LinearLayout>
