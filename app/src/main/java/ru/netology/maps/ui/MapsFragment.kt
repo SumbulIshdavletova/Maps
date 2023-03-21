@@ -1,19 +1,13 @@
 package ru.netology.maps.ui
 
 
-import android.app.Dialog
+
 import android.content.Context
-import android.content.pm.PackageManager
 import android.os.Bundle
 import android.view.*
-import android.widget.Button
-import android.widget.EditText
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
-import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.yandex.mapkit.Animation
 import com.yandex.mapkit.MapKit
 import com.yandex.mapkit.MapKitFactory
@@ -82,7 +76,8 @@ class MapsFragment : Fragment(R.layout.fragment_maps), GeoObjectTapListener, Inp
 
         val addLocation = binding.addLocation
         addLocation.setOnClickListener {
-            showCustomDialog()
+            val dialog = TitleDialog(latitude = point.latitude, longitude = point.longitude)
+            dialog.show(childFragmentManager, "dialog")
             drawMyLocationMark(point.latitude, point.longitude)
 
         }
@@ -171,11 +166,7 @@ class MapsFragment : Fragment(R.layout.fragment_maps), GeoObjectTapListener, Inp
         }
     }
 
-    fun showCustomDialog() {
-        val dialog = TitleDialog(latitude = point.latitude, longitude = point.longitude)
-        dialog.show(childFragmentManager, "dialog")
 
-    }
 
 }
 

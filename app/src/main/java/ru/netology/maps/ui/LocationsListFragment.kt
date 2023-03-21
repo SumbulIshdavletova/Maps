@@ -49,7 +49,8 @@ class LocationsListFragment : Fragment(R.layout.fragment_location_list) {
         var adapter = LocationAdapter(object : OnInteractionListener {
             override fun onEdit(location: Location) {
                 viewModel.edit(location)
-                showCustomDialog()
+                val dialog = TitleDialog(latitude = 0.0, longitude = 0.0)
+                dialog.show(childFragmentManager, "dialog")
             }
 
             override fun onRemove(location: Location) {
@@ -74,12 +75,6 @@ class LocationsListFragment : Fragment(R.layout.fragment_location_list) {
 
 
         return binding.root
-    }
-
-    fun showCustomDialog() {
-        val dialog = TitleDialog(latitude = 0.0, longitude = 0.0)
-        dialog.show(childFragmentManager, "dialog")
-
     }
 
 
