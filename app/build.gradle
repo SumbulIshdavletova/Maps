@@ -24,11 +24,13 @@ android {
             properties.load(file.newDataInputStream())
         }
 
+        buildConfigField "String", "MAPKIT_API_KEY", "\"${mapkitApiKey}\""
         manifestPlaceholders.mapsApiKey = properties.getProperty("MAPS_API_KEY", "")
     }
 
     buildFeatures {
         viewBinding true
+        buildConfig true
     }
 
     buildTypes {
@@ -97,13 +99,7 @@ dependencies {
     androidTestImplementation "androidx.test.espresso:espresso-core:$espresso_core_version"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:$lifecycle_version"
 
-    // Облегченная библиотека, содержит только карту, слой пробок,
-    // LocationManager, UserLocationLayer и возможность скачивать офлайн-карты (только в платной версии).
     implementation 'com.yandex.android:maps.mobile:4.2.2-lite'
-
-    // Полная библиотека в дополнение к lite версии предоставляет автомобильную маршрутизацию,
-    // веломаршрутизацию, пешеходную маршрутизацию и маршрутизацию на общественном транспорте,
-    // поиск, suggest, геокодирование и отображение панорам.
     implementation 'com.yandex.android:maps.mobile:4.2.2-full'
 
 

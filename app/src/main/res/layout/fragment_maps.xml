@@ -5,7 +5,7 @@
     android:name="ru.netology.maps.ui.MapsFragment"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.MapsFragment">
+    tools:context=".presentation.ui.MapsFragment">
 
     <com.yandex.mapkit.mapview.MapView
         android:id="@+id/mapview"

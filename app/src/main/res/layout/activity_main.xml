@@ -10,5 +10,5 @@
     app:defaultNavHost="true"
 
     app:navGraph="@navigation/nav_main"
-    tools:context=".ui.MainActivity"
+    tools:context=".MainActivity"
     />

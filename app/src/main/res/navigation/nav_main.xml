@@ -7,7 +7,7 @@
 
     <fragment
         android:id="@+id/mapsFragment"
-        android:name="ru.netology.maps.ui.MapsFragment"
+        android:name="ru.netology.maps.presentation.ui.MapsFragment"
         android:label="fragment_maps"
         tools:layout="@layout/fragment_maps" >
         <action
@@ -16,7 +16,7 @@
     </fragment>
     <fragment
         android:id="@+id/locationsListFragment"
-        android:name="ru.netology.maps.ui.LocationsListFragment"
+        android:name="ru.netology.maps.presentation.ui.LocationsListFragment"
         android:label="LocationsListFragment"
         tools:layout="@layout/fragment_location_list">
         <action

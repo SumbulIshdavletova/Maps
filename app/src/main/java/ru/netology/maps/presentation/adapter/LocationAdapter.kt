@@ -1,4 +1,4 @@
-package ru.netology.maps.adapter
+package ru.netology.maps.presentation.adapter
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import ru.netology.maps.R
 import ru.netology.maps.databinding.LocationCardBinding
-import ru.netology.maps.dto.Location
+import ru.netology.maps.data.dto.Location
 
 
 interface OnInteractionListener {

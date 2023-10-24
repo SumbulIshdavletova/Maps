@@ -1,10 +1,10 @@
-package ru.netology.maps.dao
+package ru.netology.maps.data
 
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
 import kotlinx.coroutines.flow.Flow
-import ru.netology.maps.entity.LocationEntity
+import ru.netology.maps.data.entity.LocationEntity
 
 @Dao
 interface MapDao {

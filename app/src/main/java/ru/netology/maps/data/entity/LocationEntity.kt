@@ -1,8 +1,8 @@
-package ru.netology.maps.entity
+package ru.netology.maps.data.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import ru.netology.maps.dto.Location
+import ru.netology.maps.data.dto.Location
 
 @Entity
 class LocationEntity(
@@ -33,4 +33,4 @@ class LocationEntity(
 }
 
 fun List<LocationEntity>.toDto(): List<Location> = map(LocationEntity::toDto)
-fun List<Location>.toEntity(): List<LocationEntity> = map(LocationEntity::fromDto)
+fun List<Location>.toEntity(): List<LocationEntity> = map(LocationEntity.Companion::fromDto)

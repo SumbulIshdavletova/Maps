@@ -1,20 +1,19 @@
-package ru.netology.maps.repository
+package ru.netology.maps.data
 
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.map
-import ru.netology.maps.dao.MapDao
-import ru.netology.maps.dto.Location
-import ru.netology.maps.entity.LocationEntity
-import ru.netology.maps.entity.toDto
+import ru.netology.maps.domain.LocationRepository
+import ru.netology.maps.data.dto.Location
+import ru.netology.maps.data.entity.LocationEntity
+import ru.netology.maps.data.entity.toDto
 import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
 class LocationRepositoryImpl @Inject constructor(
     private val dao: MapDao,
-
-) : LocationRepository {
+    ) : LocationRepository {
 
     override val data = dao.getAll()
         .map(List<LocationEntity>::toDto)

@@ -1,10 +1,11 @@
-package ru.netology.maps.dao
+package ru.netology.maps.di
 
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
-import ru.netology.maps.db.AppDb
+import ru.netology.maps.data.MapDao
+import ru.netology.maps.data.db.AppDb
 
 @InstallIn(SingletonComponent::class)
 @Module

@@ -1,11 +1,11 @@
-package ru.netology.maps.viewModel
+package ru.netology.maps.presentation.viewModel
 
 import androidx.lifecycle.*
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
-import ru.netology.maps.dto.Location
-import ru.netology.maps.repository.LocationRepository
+import ru.netology.maps.data.dto.Location
+import ru.netology.maps.domain.LocationRepository
 import javax.inject.Inject
 
 
@@ -68,7 +68,4 @@ class LocationViewModel @Inject constructor(
     }
 
     fun removeById(id: Long) = viewModelScope.launch { repository.removeById(id) }
-
-
-
 }

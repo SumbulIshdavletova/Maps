@@ -1,8 +1,8 @@
-package ru.netology.maps.repository
+package ru.netology.maps.domain
 
 
 import kotlinx.coroutines.flow.Flow
-import ru.netology.maps.dto.Location
+import ru.netology.maps.data.dto.Location
 
 interface LocationRepository {
 

@@ -1,30 +1,24 @@
-package ru.netology.maps.ui
+package ru.netology.maps.presentation.ui
 
-import android.app.Dialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.Window
-import android.widget.Button
-import android.widget.EditText
-import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import dagger.hilt.android.AndroidEntryPoint
 import ru.netology.maps.R
-import ru.netology.maps.adapter.LocationAdapter
-import ru.netology.maps.adapter.OnInteractionListener
+import ru.netology.maps.presentation.adapter.LocationAdapter
+import ru.netology.maps.presentation.adapter.OnInteractionListener
 import ru.netology.maps.databinding.FragmentLocationListBinding
-import ru.netology.maps.dto.Location
+import ru.netology.maps.data.dto.Location
 import ru.netology.maps.util.StringArg
 
-import ru.netology.maps.viewModel.LocationViewModel
+import ru.netology.maps.presentation.viewModel.LocationViewModel
 
 @AndroidEntryPoint
 class LocationsListFragment : Fragment(R.layout.fragment_location_list) {
-
 
     companion object {
         var Bundle.textArgLatitude: String? by StringArg
@@ -32,7 +26,6 @@ class LocationsListFragment : Fragment(R.layout.fragment_location_list) {
     }
 
     private val viewModel: LocationViewModel by activityViewModels()
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -45,8 +38,7 @@ class LocationsListFragment : Fragment(R.layout.fragment_location_list) {
             false
         )
 
-
-        var adapter = LocationAdapter(object : OnInteractionListener {
+        val adapter = LocationAdapter(object : OnInteractionListener {
             override fun onEdit(location: Location) {
                 viewModel.edit(location)
                 val dialog = TitleDialog(latitude = 0.0, longitude = 0.0)
@@ -73,9 +65,6 @@ class LocationsListFragment : Fragment(R.layout.fragment_location_list) {
             adapter.submitList(location)
         }
 
-
         return binding.root
     }
-
-
 }
